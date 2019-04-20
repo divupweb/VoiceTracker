@@ -11,12 +11,12 @@ namespace VoiceTracker
     public partial class VoiceTracker : ServiceBase{ // service class
         private string message; // initial message
         private StreamWriter file; // error log file
-        private VoicerTracker application; // main record class
+        private VoicerTracker application; // main application class
         private SpeechSynthesizer speech = new SpeechSynthesizer(); //synthesizer
-        public VoiceTracker(){
+        public VoiceTracker(){ //constructor
             InitializeComponent();
         }
-        protected override void OnStart(string[] args){ // start function
+        protected override void OnStart(string[] args){ // service start function
             try{
                 this.application = new VoicerTracker();
                 eventLog1.WriteEntry("initial: service VoiceTracker is running...");
@@ -40,15 +40,15 @@ namespace VoiceTracker
         }
     }
 
-    class VoicerTracker{
+    class VoicerTracker{ // main class
         private bool flag = false; // driving flag
         private DriveInfo[] drives; // drives array
         private DirectoryInfo dirInfo; // directory info
         public WaveInEvent waveSource = new WaveInEvent(); // record stream
-        public static LameMP3FileWriter lameWriter; // file writer
-        private static bool stopped = false; // write 
-        private DateTime dateStart = DateTime.Now; // date time start
-        private DateTime dateEnd = DateTime.Now.Date.AddDays(1); // date time end
+        public static LameMP3FileWriter lameWriter; // mp3 file writer
+        private static bool stopped = false; // writing flag 
+        private DateTime dateStart = DateTime.Now; // date start time for end of today
+        private DateTime dateEnd = DateTime.Now.Date.AddDays(1); // end date time for today
         private string tempFile; // file of recording 
         private string message;  // message return
         private int delay; // delay
@@ -91,7 +91,6 @@ namespace VoiceTracker
 
             if (this.tempDrive.AvailableFreeSpace < 1000000000)
                 throw new Exception("error: insufficient free disk space.");
-
         }
 
         private void microphoneCheck(){ //microphone check function
@@ -128,7 +127,7 @@ namespace VoiceTracker
         }
 
         public static async Task SetInterval(Action action, TimeSpan timeout){ //cicle function
-            await Task.Delay(timeout).ConfigureAwait(false);
+            await TaskEx.Delay(timeout).ConfigureAwait(false);
             action();
             SetInterval(action, TimeSpan.FromSeconds(1800));//cicle delay 1800
         }
