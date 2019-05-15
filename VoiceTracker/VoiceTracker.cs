@@ -118,7 +118,7 @@ namespace VoiceTracker
                 this.dirInfo.Create();
 
             this.tempFile = (this.tempDrive.Name[0] + @":\VoiceTracker\" + this.dateStart.ToShortDateString() + @"\" + this.dateStart.ToShortDateString() + "-" + this.dateStart.ToString("HH.mm.ss") + @".mp3");
-            lameWriter = new LameMP3FileWriter(this.tempFile, this.waveSource.WaveFormat,32);
+            lameWriter = new LameMP3FileWriter(this.tempFile, this.waveSource.WaveFormat,128);
 
             this.waveSource.StartRecording();
             stopped = false;
@@ -165,7 +165,7 @@ namespace VoiceTracker
                 this.dirInfo.Create();
             this.tempFile = (this.tempDrive.Name[0] + @":\VoiceTracker\" + dateStart.ToShortDateString() + @"\" + dateStart.ToShortDateString() + "-" + dateStart.ToString("HH.mm.ss") + @".mp3");
 
-            lameWriter = new LameMP3FileWriter(this.tempFile, this.waveSource.WaveFormat,32);
+            lameWriter = new LameMP3FileWriter(this.tempFile, this.waveSource.WaveFormat,128);
 
             this.waveSource.StartRecording();
         }
